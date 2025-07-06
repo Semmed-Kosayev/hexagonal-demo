@@ -1,0 +1,29 @@
+.idea
+
+product-service/HELP.md
+product-service/.gradle
+product-service/build/
+product-service/!gradle/wrapper/gradle-wrapper.jar
+product-service/!**/src/main/**/build/
+product-service/!**/src/test/**/build/
+
+### STS ###
+product-service/.apt_generated
+product-service/.classpath
+product-service/.factorypath
+product-service/.project
+product-service/.settings
+product-service/.springBeans
+product-service/.sts4-cache
+product-service/bin/
+product-service/!**/src/main/**/bin/
+product-service/!**/src/test/**/bin/
+
+### IntelliJ IDEA ###
+product-service/.idea
+product-service/*.iws
+product-service/*.iml
+product-service/*.ipr
+product-service/out/
+product-service/!**/src/main/**/out/
+product-service/!**/src/test/**/out/
