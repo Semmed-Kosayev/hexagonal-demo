@@ -1,4 +1,5 @@
 .idea
+product-service/product-service/docker-credentials.env
 
 product-service/HELP.md
 product-service/.gradle
