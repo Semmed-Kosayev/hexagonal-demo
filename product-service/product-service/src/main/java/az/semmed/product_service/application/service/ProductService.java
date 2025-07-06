@@ -3,16 +3,18 @@ package az.semmed.product_service.application.service;
 import az.semmed.product_service.domain.model.Money;
 import az.semmed.product_service.domain.model.Product;
 import az.semmed.product_service.domain.port.in.CreateProductUseCase;
+import az.semmed.product_service.domain.port.in.GetAllProductsUseCase;
 import az.semmed.product_service.domain.port.in.RenameProductUseCase;
 import az.semmed.product_service.domain.port.out.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class ProductService implements CreateProductUseCase, RenameProductUseCase {
+public class ProductService implements CreateProductUseCase, RenameProductUseCase, GetAllProductsUseCase {
 
     private final ProductRepository productRepository;
 
@@ -36,5 +38,8 @@ public class ProductService implements CreateProductUseCase, RenameProductUseCas
         productRepository.save(product);
     }
 
-
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
 }
