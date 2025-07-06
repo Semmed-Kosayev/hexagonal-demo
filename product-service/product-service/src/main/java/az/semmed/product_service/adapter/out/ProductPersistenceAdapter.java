@@ -38,4 +38,9 @@ public class ProductPersistenceAdapter implements ProductRepository {
                 .map(productMapper::mapToProduct)
                 .toList();
     }
+
+    @Override
+    public void deleteById(UUID id) {
+        productRepository.deleteById(id);
+    }
 }

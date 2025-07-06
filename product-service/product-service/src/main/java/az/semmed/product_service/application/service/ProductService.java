@@ -3,6 +3,7 @@ package az.semmed.product_service.application.service;
 import az.semmed.product_service.domain.model.Money;
 import az.semmed.product_service.domain.model.Product;
 import az.semmed.product_service.domain.port.in.CreateProductUseCase;
+import az.semmed.product_service.domain.port.in.DeleteProductUseCase;
 import az.semmed.product_service.domain.port.in.GetAllProductsUseCase;
 import az.semmed.product_service.domain.port.in.RenameProductUseCase;
 import az.semmed.product_service.domain.port.out.ProductRepository;
@@ -14,7 +15,12 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class ProductService implements CreateProductUseCase, RenameProductUseCase, GetAllProductsUseCase {
+public class ProductService implements
+        CreateProductUseCase,
+        RenameProductUseCase,
+        GetAllProductsUseCase,
+        DeleteProductUseCase
+{
 
     private final ProductRepository productRepository;
 
@@ -41,5 +47,10 @@ public class ProductService implements CreateProductUseCase, RenameProductUseCas
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public void deleteProduct(UUID productId) {
+        productRepository.deleteById(productId);
     }
 }
