@@ -13,6 +13,23 @@ services:
       POSTGRES_PASSWORD: mypassword
     volumes:
       - product-data:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+  hex_order_postgres:
+    image: postgres:15
+    container_name: hex_order_postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: order
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - order-data:/var/lib/postgresql/data
+    networks:
+      - postgres
 
   hex_pgadmin:
     container_name: hex_pgadmin
@@ -30,9 +47,11 @@ services:
     restart: unless-stopped
     depends_on:
       - hex_product_postgres
+      - hex_order_postgres
 
 volumes:
   product-data:
+  order-data:
   pgadmin:
 
 networks:
