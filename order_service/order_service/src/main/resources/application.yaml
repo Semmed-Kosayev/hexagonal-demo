@@ -11,6 +11,19 @@ spring:
     show-sql: true
     properties:
       hibernate.format_sql: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 server:
   port: 8082
+
+rabbitmq:
+  exchanges:
+    internal: order.exchange
+  queue:
+    notification: notification.queue
+  routing-keys:
+    order-placed: order.placed

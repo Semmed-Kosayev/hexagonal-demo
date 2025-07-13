@@ -1,7 +1,10 @@
 package az.semmed.order_service.application.service;
 
 import az.semmed.order_service.application.dto.OrderItemCommand;
+import az.semmed.order_service.config.messaging.RabbitOrderEventPublisher;
+import az.semmed.order_service.domain.event.OrderPlacedEvent;
 import az.semmed.order_service.domain.model.Order;
+import az.semmed.order_service.domain.model.OrderItem;
 import az.semmed.order_service.domain.port.in.CancelOrderUseCase;
 import az.semmed.order_service.domain.port.in.PlaceOrderUseCase;
 import az.semmed.order_service.domain.port.in.ShipOrderUseCase;
@@ -20,9 +23,11 @@ public class OrderCommandService implements
         ShipOrderUseCase {
 
     private final OrderRepository orderRepository;
+    private final RabbitOrderEventPublisher rabbitOrderEventPublisher;
 
-    public OrderCommandService(OrderRepository orderRepository) {
+    public OrderCommandService(OrderRepository orderRepository, RabbitOrderEventPublisher rabbitOrderEventPublisher) {
         this.orderRepository = orderRepository;
+        this.rabbitOrderEventPublisher = rabbitOrderEventPublisher;
     }
 
 
@@ -36,16 +41,21 @@ public class OrderCommandService implements
     }
 
     @Override
-    public UUID place(List<OrderItemCommand> items) {
-        UUID orderId = UUID.randomUUID();
-        Order order = new Order(orderId);
+    public UUID place(List<OrderItemCommand> itemsCommand) {
+        List<OrderItem> items = itemsCommand.stream()
+                .map(cmd -> new OrderItem(cmd.productId(), cmd.quantity(), cmd.price()))
+                .toList();
 
-        items.forEach(i ->
-                order.addItem(i.productId(), i.price(), i.quantity())
-        );
-
+        Order order = Order.place(items);
         orderRepository.save(order);
-        return orderId;
+
+        order.getDomainEvents().forEach(event -> {
+            if (event instanceof OrderPlacedEvent orderPlacedEvent) {
+                rabbitOrderEventPublisher.publish(orderPlacedEvent);
+            }
+        });
+
+        return order.getId();
     }
 
     @Override

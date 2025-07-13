@@ -48,6 +48,12 @@ services:
     depends_on:
       - hex_product_postgres
       - hex_order_postgres
+  hex_rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: hex_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
 volumes:
   product-data:
