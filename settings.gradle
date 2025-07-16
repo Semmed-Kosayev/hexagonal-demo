@@ -1,0 +1,5 @@
+rootProject.name = 'hexagonal-demo'
+
+include 'amqp-core'
+include 'order_service'
+include 'product-service'

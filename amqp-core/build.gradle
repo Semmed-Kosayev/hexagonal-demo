@@ -1,0 +1,51 @@
+plugins {
+	id 'java-library' // This is crucial for making it a reusable library
+	id 'maven-publish' // Optional, but good practice if you ever want to publish it standalone
+	// If amqp-core uses Spring Boot features for configuration, you might need:
+	id 'org.springframework.boot' version '3.3.1' // Use your Spring Boot version
+	id 'io.spring.dependency-management' version '1.1.5' // Use your version
+}
+
+group = 'az.semmed'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			groupId = 'az.semmed'
+			artifactId = 'amqp-core'
+			version = '0.0.1-SNAPSHOT'
+
+			from components.java
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

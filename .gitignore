@@ -1,12 +1,12 @@
 .idea
-product-service/product-service/docker-credentials.env
+product-service/docker-credentials.env
 
-product-service/HELP.md
-product-service/.gradle
-product-service/build/
-product-service/!gradle/wrapper/gradle-wrapper.jar
-product-service/!**/src/main/**/build/
-product-service/!**/src/test/**/build/
+**/HELP.md
+**/.gradle
+**/build/
+**/!gradle/wrapper/gradle-wrapper.jar
+**/!**/src/main/**/build/
+**/!**/src/test/**/build/
 
 ### STS ###
 product-service/.apt_generated
@@ -21,10 +21,10 @@ product-service/!**/src/main/**/bin/
 product-service/!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-product-service/.idea
-product-service/*.iws
-product-service/*.iml
-product-service/*.ipr
-product-service/out/
-product-service/!**/src/main/**/out/
-product-service/!**/src/test/**/out/
+**/.idea
+**/*.iws
+**/*.iml
+**/*.ipr
+**/out/
+**/!**/src/main/**/out/
+**/!**/src/test/**/out/

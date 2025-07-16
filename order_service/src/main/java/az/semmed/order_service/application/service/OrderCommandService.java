@@ -1,7 +1,9 @@
 package az.semmed.order_service.application.service;
 
+import az.semmed.amqpcore.RabbitMQConstants;
+import az.semmed.amqpcore.RabbitMQMessagePublisher;
 import az.semmed.order_service.application.dto.OrderItemCommand;
-import az.semmed.order_service.config.messaging.RabbitOrderEventPublisher;
+import az.semmed.order_service.application.dto.OrderPlacedNotification;
 import az.semmed.order_service.domain.event.OrderPlacedEvent;
 import az.semmed.order_service.domain.model.Order;
 import az.semmed.order_service.domain.model.OrderItem;
@@ -23,13 +25,12 @@ public class OrderCommandService implements
         ShipOrderUseCase {
 
     private final OrderRepository orderRepository;
-    private final RabbitOrderEventPublisher rabbitOrderEventPublisher;
+    private final RabbitMQMessagePublisher publisher;
 
-    public OrderCommandService(OrderRepository orderRepository, RabbitOrderEventPublisher rabbitOrderEventPublisher) {
+    public OrderCommandService(OrderRepository orderRepository, RabbitMQMessagePublisher publisher) {
         this.orderRepository = orderRepository;
-        this.rabbitOrderEventPublisher = rabbitOrderEventPublisher;
+        this.publisher = publisher;
     }
-
 
     @Override
     public void cancel(UUID orderId) {
@@ -51,7 +52,11 @@ public class OrderCommandService implements
 
         order.getDomainEvents().forEach(event -> {
             if (event instanceof OrderPlacedEvent orderPlacedEvent) {
-                rabbitOrderEventPublisher.publish(orderPlacedEvent);
+                publisher.publish(
+                        new OrderPlacedNotification(orderPlacedEvent.getOrderId()),
+                        RabbitMQConstants.ORDER_EXCHANGE,
+                        RabbitMQConstants.ORDER_PLACED_ROUTING_KEY
+                );
             }
         });
 
