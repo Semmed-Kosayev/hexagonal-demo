@@ -2,8 +2,8 @@ package az.semmed.order_service.application.service;
 
 import az.semmed.amqpcore.RabbitMQConstants;
 import az.semmed.amqpcore.RabbitMQMessagePublisher;
+import az.semmed.amqpcore.dto.OrderPlacedNotification;
 import az.semmed.order_service.application.dto.OrderItemCommand;
-import az.semmed.order_service.application.dto.OrderPlacedNotification;
 import az.semmed.order_service.domain.event.OrderPlacedEvent;
 import az.semmed.order_service.domain.model.Order;
 import az.semmed.order_service.domain.model.OrderItem;
@@ -44,7 +44,11 @@ public class OrderCommandService implements
     @Override
     public UUID place(List<OrderItemCommand> itemsCommand) {
         List<OrderItem> items = itemsCommand.stream()
-                .map(cmd -> new OrderItem(cmd.productId(), cmd.quantity(), cmd.price()))
+                .map(cmd -> new OrderItem(
+                        cmd.productId(),
+                        cmd.quantity(),
+                        cmd.price())
+                )
                 .toList();
 
         Order order = Order.place(items);

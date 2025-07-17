@@ -1,4 +1,4 @@
-package az.semmed.order_service.application.dto;
+package az.semmed.amqpcore.dto;
 
 import java.util.UUID;
 

@@ -31,6 +31,21 @@ services:
     networks:
       - postgres
 
+  hex_notification_postgres:
+    image: postgres:15
+    container_name: hex_notification_postgres
+    restart: unless-stopped
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: notification
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - notification-data:/var/lib/postgresql/data
+    networks:
+      - postgres
+
   hex_pgadmin:
     container_name: hex_pgadmin
     image: dpage/pgadmin4
@@ -58,6 +73,7 @@ services:
 volumes:
   product-data:
   order-data:
+  notification-data:
   pgadmin:
 
 networks:
